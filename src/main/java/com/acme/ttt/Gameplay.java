@@ -42,7 +42,7 @@ public abstract class Gameplay {
         Board board = this.engine.getBoard();
         Player currentPlayer = this.getCurrentPlayer();
         this.nextMove = currentPlayer.makeChoice(board);
-        if (!board.canPlace(this.nextMove.i(), this.nextMove.j())) {
+        if (!board.canPlace(this.nextMove)) {
             this.makeValidChoice();
         }
         this.refreshView();

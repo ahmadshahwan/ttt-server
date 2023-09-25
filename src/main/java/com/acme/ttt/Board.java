@@ -12,21 +12,25 @@ public class Board {
         this.numberOfEmptyCells = length * length;
     }
 
-    public Mark at(int i, int j) {
+    public Mark at(Coordinate coordinate) {
+        int i = coordinate.i();
+        int j = coordinate.j();
         return this.cells[i][j];
     }
 
     public boolean isFull() {
         return this.numberOfEmptyCells <= 0;
     }
-    public boolean canPlace(int i, int j) {
-        return !this.isFull() && this.at(i, j) == null;
+    public boolean canPlace(Coordinate coordinate) {
+        return !this.isFull() && this.at(coordinate) == null;
     }
 
-    public synchronized void place(int i, int j, Mark mark) {
-        if (!canPlace(i, j)) {
+    public synchronized void place(Coordinate coordinate, Mark mark) {
+        if (!canPlace(coordinate)) {
             throw new IllegalStateException("Board is full or cell is occupied.");
         }
+        int i = coordinate.i();
+        int j = coordinate.j();
         this.cells[i][j] = mark;
         this.numberOfEmptyCells--;
     }

@@ -76,7 +76,7 @@ public class TerminalGameplay extends Gameplay {
         Board board = this.engine.getBoard();
         int i = current.i();
         int j = current.j();
-        Mark player = board.at(current.i(), current.j());
+        Mark player = board.at(current);
         if (current.equals(this.nextMove)) {
             return " >%s<".formatted(this.engine.getCurrentMark());
         } else if (player == null) {
@@ -91,6 +91,6 @@ public class TerminalGameplay extends Gameplay {
     }
 
     private boolean isInWinningCombination(Coordinate current) {
-        return false;
+        return this.engine.isInWinningCombination(current);
     }
 }

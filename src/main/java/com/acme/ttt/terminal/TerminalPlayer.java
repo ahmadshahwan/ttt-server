@@ -51,7 +51,7 @@ public class TerminalPlayer implements Player {
         }
         int i = (cell - 1) / length;
         int j = (cell - 1) % length;
-        if (!board.canPlace(i, j)) {
+        if (!board.canPlace(new Coordinate(i, j))) {
             return null;
         }
         return new Coordinate(i, j);
