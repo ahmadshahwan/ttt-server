@@ -7,38 +7,38 @@ import com.acme.ttt.GameView;
 import com.acme.ttt.Mark;
 import com.acme.ttt.i18n.Text;
 
-public class TerminalView implements GameView {
+public class PrinterView implements GameView {
 
     protected final Text text;
-    protected final Terminal terminal;
+    protected final Printer printer;
     protected final GameEngine engine;
 
-    public TerminalView(Text text, Terminal terminal, GameEngine engine) {
+    public PrinterView(Text text, Printer printer, GameEngine engine) {
         this.text = text;
-        this.terminal = terminal;
+        this.printer = printer;
         this.engine = engine;
     }
 
     @Override
     public void declareTurn() {
-        this.terminal.printLine(this.text.playerTurn.formatted(this.engine.getCurrentMark()));
+        this.printer.printLine(this.text.playerTurn.formatted(this.engine.getCurrentMark()));
     }
 
     @Override
     public void declareWinner() {
-        this.terminal.printLine(this.text.playerWins.formatted(this.engine.getCurrentMark().other()));
+        this.printer.printLine(this.text.playerWins.formatted(this.engine.getCurrentMark().other()));
     }
 
     @Override
     public void declareDraw() {
-        this.terminal.printLine(this.text.boardIsFull);
+        this.printer.printLine(this.text.boardIsFull);
     }
 
     @Override
     public void refresh() {
         Board board = this.engine.getBoard();
         int length = board.getLength();
-        this.terminal.printLine("");
+        this.printer.printLine("");
         for (int i = 0; i < length; i++) {
             StringBuilder sb = new StringBuilder();
             sb.append(" |");
@@ -47,7 +47,7 @@ public class TerminalView implements GameView {
                 sb.append(this.cellToString(current));
             }
             sb.append("|");
-            this.terminal.printLine(sb.toString());
+            this.printer.printLine(sb.toString());
         }
     }
 

@@ -36,7 +36,7 @@ public class TerminalGameplay extends Gameplay {
 
     @Override
     protected GameView createView(GameEngine engine) {
-        return new TerminalView(this.text, this.terminal, engine);
+        return new PrinterView(this.text, this.terminal, engine);
     }
 
     @Override
