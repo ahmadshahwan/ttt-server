@@ -9,6 +9,7 @@ public class TerminalPlayer implements Player {
 
     protected final Terminal terminal;
     protected final Text text;
+    protected Coordinate lastRead;
 
     public TerminalPlayer(Terminal terminal, Text text) {
         this.terminal = terminal;
@@ -17,6 +18,11 @@ public class TerminalPlayer implements Player {
 
     @Override
     public Coordinate makeChoice(Board board) {
+        if (lastRead != null) {
+            Coordinate result = this.lastRead;
+            this.lastRead = null;
+            return result;
+        }
         this.terminal.printLine(text.enterLabel);
         Coordinate next = this.tryToMakeChoice(board);
         if (next != null) {
@@ -29,6 +35,10 @@ public class TerminalPlayer implements Player {
 
     public Coordinate tryToMakeChoice(Board board) {
         String line = this.terminal.nextLine();
+        return this.tryToMakeChoice(board, line);
+    }
+
+    public Coordinate tryToMakeChoice(Board board, String line) {
         int length = board.getLength();
         int cell;
         try {
@@ -51,6 +61,16 @@ public class TerminalPlayer implements Player {
     public boolean confirmChoice(Board board, Coordinate coordinate) {
         this.terminal.printLine(this.text.confirmChoice);
         String line = this.terminal.nextLine();
-        return line.isEmpty();
+        if (line.isEmpty()) {
+            return true;
+        }
+        Coordinate attempt = this.tryToMakeChoice(board, line);
+        if (coordinate.equals(attempt)) {
+            return true;
+        }
+        if (attempt != null) {
+            this.lastRead = attempt;
+        }
+        return false;
     }
 }
