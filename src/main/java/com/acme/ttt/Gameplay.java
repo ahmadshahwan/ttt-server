@@ -1,13 +1,14 @@
 package com.acme.ttt;
 
-public abstract class Gameplay {
+public abstract class Gameplay implements Runnable {
     protected GameEngine engine;
     protected GameView view;
     protected Player playerX;
     protected Player playerO;
 
-    public void play() {
-        this.engine = this.createEngine();
+    public void run() {
+        int size = this.getBoardDimension();
+        this.engine = new GameEngine(size, Mark.X);
         this.view = this.createView(this.engine);
         this.playerX = this.createPlayer(Mark.X);
         this.playerO = this.createPlayer(Mark.O);
@@ -56,7 +57,7 @@ public abstract class Gameplay {
         return this.engine.getCurrentMark() == Mark.X ? this.playerX : this.playerO;
     }
 
-    protected abstract GameEngine createEngine();
+    protected abstract int getBoardDimension();
 
     protected abstract GameView createView(GameEngine engine);
 

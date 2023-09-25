@@ -14,6 +14,6 @@ public class LocalGameplay extends TerminalGameplay {
 
 
     public static void main(String[] args) {
-        new LocalGameplay().play();
+        new LocalGameplay().run();
     }
 }

@@ -18,19 +18,19 @@ public class TerminalGameplay extends Gameplay {
     }
 
     @Override
-    protected GameEngine createEngine() {
+    protected int getBoardDimension() {
         this.terminal.printLine(this.text.boardChoice);
         String line = this.terminal.nextLine();
         try {
             int size = Integer.parseInt(line);
             if (size < 3 || size > 9) {
                 this.terminal.printLine(this.text.badBoardChoice);
-                return this.createEngine();
+                return this.getBoardDimension();
             }
-            return new GameEngine(size, Mark.X);
+            return size;
         } catch (NumberFormatException e) {
             this.terminal.printLine(this.text.badInput);
-            return this.createEngine();
+            return this.getBoardDimension();
         }
     }
 

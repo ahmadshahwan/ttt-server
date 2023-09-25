@@ -1,6 +1,5 @@
 package com.acme.ttt.network;
 
-import com.acme.ttt.GameEngine;
 import com.acme.ttt.Mark;
 import com.acme.ttt.Player;
 import com.acme.ttt.i18n.Text;
@@ -28,13 +27,13 @@ public class NetworkGameplay extends TerminalGameplay implements AutoCloseable {
     }
 
     @Override
-    protected GameEngine createEngine() {
+    public void run() {
         try {
             this.server = new ServerSocket(PORT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return super.createEngine();
+        super.run();
     }
 
     @Override
@@ -66,7 +65,7 @@ public class NetworkGameplay extends TerminalGameplay implements AutoCloseable {
 
     public static void main(String[] args) {
         try (NetworkGameplay gameplay = new NetworkGameplay()) {
-            gameplay.play();
+            gameplay.run();
         } catch (Exception e) {
             System.err.println(Text.en().gameEnded);
         }

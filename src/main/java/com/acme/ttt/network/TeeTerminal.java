@@ -7,16 +7,13 @@ import java.util.List;
 
 public class TeeTerminal implements Terminal {
 
-    private List<Terminal> sinks;
-    private Terminal master;
+    private final List<Terminal> sinks;
+    private final Terminal master;
 
     public TeeTerminal(Terminal master) {
         this.sinks = new ArrayList<>();
         this.master = master;
         this.sinks.add(master);
-    }
-    public TeeTerminal() {
-        this.sinks = new ArrayList<>();
     }
 
     public void append(Terminal terminal) {
@@ -25,7 +22,7 @@ public class TeeTerminal implements Terminal {
 
     @Override
     public String nextLine() {
-        return this.master == null ? null : this.master.nextLine();
+        return this.master.nextLine();
     }
 
     @Override
