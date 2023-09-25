@@ -1,8 +1,6 @@
 package com.acme.ttt;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class GameEngine {
 
