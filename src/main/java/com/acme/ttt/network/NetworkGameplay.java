@@ -28,13 +28,13 @@ public class NetworkGameplay extends TerminalGameplay implements AutoCloseable {
     }
 
     @Override
-    protected GameEngine createGameEngine() {
+    protected GameEngine createEngine() {
         try {
             this.server = new ServerSocket(PORT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return super.createGameEngine();
+        return super.createEngine();
     }
 
     @Override

@@ -10,6 +10,8 @@ public class GameEngine {
     private boolean gameWon = false;
     private Coordinate[] winningCombination;
 
+    protected Coordinate nextMove;
+
 
     public GameEngine(int length, Mark firstPlayer) {
         this.length = length;
@@ -21,7 +23,12 @@ public class GameEngine {
         return currentMark;
     }
 
-    public boolean play(Coordinate coordinate) {
+    public boolean play() {
+        if (this.nextMove == null) {
+            throw new IllegalStateException("Next move undefined yet");
+        }
+        Coordinate coordinate = this.nextMove;
+        this.nextMove = null;
         this.board.place(coordinate, this.currentMark);
         this.gameWon = this.checkWin(coordinate);
         this.currentMark = this.currentMark.other();
@@ -42,6 +49,14 @@ public class GameEngine {
 
     public Board getBoard() {
         return board;
+    }
+
+    public Coordinate getNextMove() {
+        return nextMove;
+    }
+
+    public void setNextMove(Coordinate nextMove) {
+        this.nextMove = nextMove;
     }
 
     private boolean checkWin(Coordinate coordinate) {

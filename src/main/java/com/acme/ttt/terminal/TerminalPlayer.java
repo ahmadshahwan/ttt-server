@@ -71,6 +71,7 @@ public class TerminalPlayer implements Player {
         if (attempt != null) {
             this.lastRead = attempt;
         }
+        this.terminal.printLine(this.text.badInput);
         return false;
     }
 }

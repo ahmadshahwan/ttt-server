@@ -2,26 +2,26 @@ package com.acme.ttt;
 
 public abstract class Gameplay {
     protected GameEngine engine;
-    protected Coordinate nextMove;
+    protected GameView view;
     protected Player playerX;
     protected Player playerO;
 
     public void play() {
-        this.engine = this.createGameEngine();
+        this.engine = this.createEngine();
+        this.view = this.createView(this.engine);
         this.playerX = this.createPlayer(Mark.X);
         this.playerO = this.createPlayer(Mark.O);
-        this.nextMove = null;
         if (this.hasWinner()) {
-            this.declareWinner();
+            this.view.declareWinner();
         } else {
-            this.declareDraw();
+            this.view.declareDraw();
         }
     }
 
     protected boolean hasWinner() {
-        this.refreshView();
+        this.view.refresh();
         while (!engine.isGameOver()) {
-            this.declareTurn();
+            this.view.declareTurn();
             this.makeValidChoice();
             if (this.playNextMove()) {
                 return true;
@@ -31,22 +31,23 @@ public abstract class Gameplay {
     }
 
     protected boolean playNextMove() {
-        Coordinate move = this.nextMove;
-        this.nextMove = null;
-        boolean result = this.engine.play(move);
-        this.refreshView();
+        boolean result = this.engine.play();
+        this.view.refresh();
         return result;
     }
 
     protected void makeValidChoice() {
         Board board = this.engine.getBoard();
         Player currentPlayer = this.getCurrentPlayer();
-        this.nextMove = currentPlayer.makeChoice(board);
-        if (!board.canPlace(this.nextMove)) {
+        Coordinate nextMove = currentPlayer.makeChoice(board);
+        if (!board.canPlace(nextMove)) {
             this.makeValidChoice();
+            return;
+        } else {
+            this.engine.setNextMove(nextMove);
         }
-        this.refreshView();
-        if (!currentPlayer.confirmChoice(board, this.nextMove)) {
+        this.view.refresh();
+        if (!currentPlayer.confirmChoice(board, nextMove)) {
             this.makeValidChoice();
         }
     }
@@ -55,15 +56,9 @@ public abstract class Gameplay {
         return this.engine.getCurrentMark() == Mark.X ? this.playerX : this.playerO;
     }
 
-    protected abstract GameEngine createGameEngine();
+    protected abstract GameEngine createEngine();
+
+    protected abstract GameView createView(GameEngine engine);
 
     protected abstract Player createPlayer(Mark mark);
-
-    protected abstract void refreshView();
-
-    protected abstract void declareTurn();
-
-    protected abstract void declareWinner();
-
-    protected abstract void declareDraw();
 }
