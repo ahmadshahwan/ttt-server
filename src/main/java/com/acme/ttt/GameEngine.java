@@ -1,6 +1,7 @@
 package com.acme.ttt;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 public class GameEngine {
 
@@ -65,10 +66,11 @@ public class GameEngine {
         return this.testLine(i) || this.testColumn(j) || this.testDiagonal(i, j) || this.testAntidiagonal(i, j);
     }
 
-    private boolean testLine(int i) {
+
+    private boolean testOverRange(Function<Integer, Coordinate> function) {
         Coordinate[] winning = new Coordinate[this.length];
         for (int step = 0; step < this.length; step++) {
-            Coordinate coordinate = new Coordinate(i, step);
+            Coordinate coordinate = function.apply(step);
             if (this.board.at(coordinate) != this.currentMark) {
                 return false;
             }
@@ -78,48 +80,25 @@ public class GameEngine {
         return true;
     }
 
+    private boolean testLine(int i) {
+        return this.testOverRange(step -> new Coordinate(i, step));
+    }
+
     private boolean testColumn(int j) {
-        Coordinate[] winning = new Coordinate[this.length];
-        for (int step = 0; step < this.length; step++) {
-            Coordinate coordinate = new Coordinate(step, j);
-            if (this.board.at(coordinate) != this.currentMark) {
-                return false;
-            }
-            winning[step] = coordinate;
-        }
-        this.winningCombination = winning;
-        return true;
+        return this.testOverRange(step -> new Coordinate(step, j));
     }
 
     private boolean testDiagonal(int i, int j) {
         if (i != j) {
             return false;
         }
-        Coordinate[] winning = new Coordinate[this.length];
-        for (int step = 0; step < this.length; step++) {
-            Coordinate coordinate = new Coordinate(step, step);
-            if (this.board.at(coordinate) != this.currentMark) {
-                return false;
-            }
-            winning[step] = coordinate;
-        }
-        this.winningCombination = winning;
-        return true;
+        return this.testOverRange(step -> new Coordinate(step, step));
     }
 
     private boolean testAntidiagonal(int i, int j) {
         if (i != this.length - j - 1) {
             return false;
         }
-        Coordinate[] winning = new Coordinate[this.length];
-        for (int step = 0; step < this.length; step++) {
-            Coordinate coordinate = new Coordinate(step, this.length - step - 1);
-            if (this.board.at(coordinate) != this.currentMark) {
-                return false;
-            }
-            winning[step] = coordinate;
-        }
-        this.winningCombination = winning;
-        return true;
+        return this.testOverRange(step -> new Coordinate(step, this.length - step - 1));
     }
 }
